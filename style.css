@@ -1,0 +1,20 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #000;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#timer {
+    font-size: 10vw;
+    font-family: Courier New, Courier, monospace;
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="timer">
+        <!--<span id="hours"></span>:<span id="minutes"></span>:<span id="seconds"></span>.<span id="microseconds"></span>-->
+        <span id="hours"></span>h <span id="minutes"></span>m <span id="seconds"></span>s <span id="microseconds"></span>
+    </div>
+
+    <audio id="beep" loop="loop">
+        <source src="./audio.ogg" type="audio/ogg">
+        <source src="./audio.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="timer.js"></script>
+</body>
+</html>
