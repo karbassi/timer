@@ -52,20 +52,9 @@ function run(str) {
     }
 
     start = new Date();
+    end = new Date(start.getTime() + getTime(str));
 
-    var ms = getTime(str);
-    end = new Date(start.getTime() + ms);
-    var diff = end - +new Date();
-    console.log(start, end, diff);
-
-    // // var hms = new Date(ms).toISOString().substr(11, 8).split(":");
-    // // console.log(hms);
-    // // display(hms);
-
-    // end = new Date(start.getTime() + ms);
-    // window.requestAnimationFrame(step);
     step();
-
 };
 
 run(window.location.hash.slice(1));
