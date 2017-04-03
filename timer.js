@@ -134,6 +134,7 @@ function stopSound() {
 function stopTimer() {
     // Reset timer
     isStopped = true;
+    end = undefined;
     display(hmss(0));
 }
 
