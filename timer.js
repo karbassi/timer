@@ -46,8 +46,9 @@ function display(date) {
 
 function run(str) {
 
-    if (!str || str.length === 0) {
-        str = window.location.hash.slice(1);
+    if (!str) {
+        stop();
+        return;
     }
 
     start = new Date();
@@ -67,7 +68,7 @@ function run(str) {
 
 };
 
-run();
+run(window.location.hash.slice(1));
 
 function hmss(microseconds) {
     var date = {};
