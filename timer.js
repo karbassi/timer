@@ -139,6 +139,14 @@ function stopTimer() {
 }
 
 /**
+ * Stop timer and sounds.
+ */
+function stop() {
+    stopSound();
+    stopTimer();
+}
+
+/**
  * Toggle Microseconds
  */
 function toggleMs() {
