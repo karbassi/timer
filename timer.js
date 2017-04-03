@@ -1,5 +1,3 @@
-console.log('timer');
-
 var start;
 var end;
 var isStopped = false;
@@ -18,7 +16,6 @@ var sound = $('#beep');
 
 
 function getTime(str) {
-    // console.log(str)
     if (str.indexOf(':') == -1) {
         return parseInt(str, 10) * 1e3;
     }
@@ -45,7 +42,6 @@ function display(date) {
     $('#seconds').innerText = date.seconds;
     $('#microseconds').innerText = date.microseconds;
 
-    // console.log(seconds);
 }
 
 function run(str) {
@@ -106,7 +102,6 @@ function hmss(microseconds) {
     var d = parseInt(x, 10) + '';
     date.days = '00'.substring(d.length) + d
 
-    // console.log(ms/1e3%1*1e3);
 
     return date;
 }
