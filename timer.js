@@ -1,126 +1,191 @@
-var start;
-var end;
-var isStopped = false;
+const sound = $('#beep');
+let start;
+let end;
+let isStopped = false;
+let msHidden = true;
 
 function $(str) {
-    var q = document.querySelectorAll(str);
-    if (q.length === 1) {
-        return q[0];
-    }
-    else {
-        return q;
-    }
+	const q = document.querySelectorAll(str);
+	if (q.length === 1) {
+		return q[0];
+	}
+
+	return q;
 }
 
-var sound = $("#beep");
+Element.prototype.hide = function () {
+	this.style.display = 'none';
+};
 
+Element.prototype.show = function (forcedDisplayValue) {
+	if (forcedDisplayValue) {
+		this.style.display = forcedDisplayValue;
+	} else {
+		this.style.removeProperty('display');
+	}
+};
 
 function getTime(str) {
-    if (str.indexOf(":") == -1) {
-        return parseInt(str, 10) * 1e3;
-    }
+	if (str.indexOf(':') === -1) {
+		return parseInt(str, 10) * 1e3;
+	}
 
-    var ms = 0;
+	let ms = 0;
 
-    var multiples = [
-        60 * 60,
-        60,
-        1
-    ];
+	const multiples = [
+        // 1 second
+		1,
 
-    var parts = str.split(":");
-    while (parts.length > 0) {
-        ms += parts.pop() * multiples.pop()
-    }
+        // 1 minute
+        // 60 seconds
+		60,
 
-    return ms * 1e3;
+        // 1 hour
+        // 60 * 60 seconds
+		3600,
+
+        // 1 day
+        // 60 * 60 * 24 seconds
+		86400,
+
+        // 1 week
+        // 60 * 60 * 24 * 7 seconds
+		604800
+	];
+
+	const parts = str.split(':');
+	while (parts.length > 0) {
+		ms += parts.pop() * multiples.shift();
+	}
+
+	return ms * 1e3;
 }
 
 function display(date) {
-    $("#hours").innerText = date.hours;
-    $("#minutes").innerText = date.minutes;
-    $("#seconds").innerText = date.seconds;
-    $("#microseconds").innerText = date.microseconds;
+	if (date.isEmpty === true) {
+		$('#timer').hide();
+		$('#tutorial').show();
+		return;
+	}
 
+	$('#bgfill').show();
+	$('#timer').show();
+	$('#tutorial').hide();
+
+	const parts = ['days', 'hours', 'minutes', 'seconds', 'milliseconds'];
+
+	for (let i = 0; i < parts.length; i++) {
+		const part = parts[i];
+		let show = false;
+
+		let x = i;
+		while (x >= 0) {
+			show = (show || parseInt(date[parts[x]], 10) > 0);
+			x--;
+		}
+
+		if (show === true) {
+			$('#' + part).style.display = 'inline-block';
+			$('#' + part + ' span').innerText = date[part];
+		} else {
+			$('#' + part).style.display = 'none';
+		}
+
+		if (part === 'milliseconds') {
+			if (msHidden === true) {
+				$('#milliseconds').style.display = 'none';
+			} else {
+				$('#milliseconds').style.display = '';
+			}
+		}
+	}
 }
 
 function run(str) {
+	if (!str) {
+		stop();
+		return;
+	}
 
-    if (!str) {
-        stop();
-        return;
-    }
+	start = new Date();
+	end = new Date(start.getTime() + getTime(str));
 
-    start = new Date();
-    end = new Date(start.getTime() + getTime(str));
+	step();
+}
 
-    step();
-};
+function hmss(milliseconds) {
+	const date = {
+		isEmpty: false
+	};
 
-run(window.location.hash.slice(1));
+	if (parseFloat(milliseconds) <= 0) {
+		date.isEmpty = true;
+		return date;
+	}
 
-function hmss(microseconds) {
-    var date = {};
+	let x = milliseconds / 1e3;
 
-    var x = microseconds / 1e3;
+    // Milliseconds
+	let ms = String(parseInt(((x % 1) * 1e3), 10));
 
-    // Microseconds
-    var ms = parseInt(((x % 1) * 1e3), 10) + "";
+	while (ms.length < 3) {
+		ms += '0';
+	}
 
-    while (ms.length < 3) {
-        ms += "0";
-    }
-
-    date.microseconds = ms;
+	date.milliseconds = ms;
 
     // Seconds
-    var s = parseInt(x % 60, 10) + "";
-    date.seconds = "00".substring(s.length) + s
+	const s = String(parseInt(x % 60, 10));
+	date.seconds = '00'.substring(s.length) + s;
 
     // Minute
-    x /= 60;
-    var m = parseInt(x % 60, 10) + "";
-    date.minutes = "00".substring(m.length) + m
+	x /= 60;
+	const m = String(parseInt(x % 60, 10));
+	date.minutes = '00'.substring(m.length) + m;
 
     // Hours
-    x /= 60;
-    var h = parseInt(x % 24, 10) + "";
-    date.hours = "00".substring(h.length) + h
+	x /= 60;
+	const h = String(parseInt(x % 24, 10));
+	date.hours = '00'.substring(h.length) + h;
 
     // Days
-    x /= 24;
-    var d = parseInt(x, 10) + "";
-    date.days = "00".substring(d.length) + d
+	x /= 24;
+	const d = String(parseInt(x, 10));
+	date.days = '00'.substring(d.length) + d;
 
-
-    return date;
+	return date;
 }
 
 /**
  *
  */
 function step() {
+	if (isStopped) {
+		return;
+	}
 
-    if (isStopped) {
-        return;
-    }
+	const now = Number(new Date());
+	const diff = end - now;
 
-    var diff = end - +new Date();
+	if (diff > 0) {
+		const percentage = ((now - start) / (end - start)) * 100;
+		$('#bgfill').style.width = percentage + '%';
 
-    if (diff > 0) {
-        var date = hmss(diff);
+		display(hmss(diff));
 
-        display(date);
-
-        window.requestAnimationFrame(step);
-    } else {
-
+		window.requestAnimationFrame(step);
+	} else {
         // Done
-        display(hmss(0));
+		// display(hmss(0));
 
-        sound.play();
-        isStopped = true;
-    }
+		$('#tutorial').hide();
+		$('#timer').hide();
+		$('#done').show('flex');
+		$('#bgfill').hide();
+
+		sound.play();
+		isStopped = true;
+	}
 }
 
 /**
@@ -129,23 +194,22 @@ function step() {
  * @param {String} seconds
  */
 function addToTimer(seconds) {
-    var ms = parseInt(seconds, 10) * 1e3;
+	const ms = parseInt(seconds, 10) * 1e3;
 
-    if (!(end instanceof Date)) {
-        end = new Date();
-    }
+	if (!(end instanceof Date)) {
+		end = new Date();
+	}
 
-    end = new Date(end.getTime() + ms);
-    step();
+	end = new Date(end.getTime() + ms);
+	step();
 }
-
 
 /**
  * Stop Audio
  */
 function stopSound() {
-    sound.pause();
-    sound.currentTime = 0;
+	sound.pause();
+	sound.currentTime = 0;
 }
 
 /**
@@ -153,41 +217,38 @@ function stopSound() {
  */
 function stopTimer() {
     // Reset timer
-    isStopped = true;
-    end = undefined;
-    display(hmss(0));
+	isStopped = true;
+	end = undefined;
+	// Display(hmss(0));
+	$('#tutorial').show();
+	$('#timer').hide();
+	$('#done').hide();
+	$('#bgfill').hide();
 }
 
 /**
  * Stop timer and sounds.
  */
 function stop() {
-    stopSound();
-    stopTimer();
+	stopSound();
+	stopTimer();
 }
 
 /**
- * Toggle Microseconds
+ * Toggle milliseconds
  */
 function toggleMs() {
-    $("#microseconds").style.display = $("#microseconds").style.display === "none" ? "" : "none";
+	msHidden = !msHidden;
 }
 
 // Event Listeners
 
-
-
 /**
  * Called when the body is double clicked
- *
- * @param {MouseEvent} event
  */
-function onBodyDblclick(event) {
-    stop();
+function onBodyDblclick() {
+	stop();
 }
-
-$("body").addEventListener("dblclick", onBodyDblclick);
-
 
 /**
  * Called when page hash changes.
@@ -195,12 +256,9 @@ $("body").addEventListener("dblclick", onBodyDblclick);
  * @param {MouseEvent} event
  */
 function onHashChange(event) {
-    var str = event.target.window.location.hash.slice(1);
-    run(str);
+	const str = event.target.window.location.hash.slice(1);
+	run(str);
 }
-
-window.addEventListener("hashchange", onHashChange);
-
 
 /**
  * Called whenever a keyboard key is pressed.
@@ -208,43 +266,46 @@ window.addEventListener("hashchange", onHashChange);
  * @param {MouseEvent} event
  */
 function onKeyPressed(event) {
-    if (event.defaultPrevented) {
-        return; // Do nothing if the event was already processed
-    }
+	if (event.defaultPrevented) {
+		return; // Do nothing if the event was already processed
+	}
 
-    switch (true) {
-        case event.key === " ":
-        case event.key === "0":
-            stop();
-            break;
+    // 32 = spacebar
+    // 48 = "0" key
+	if (event.keyCode === 32 || event.keyCode === 48) {
+		stop();
+		return;
+	}
 
-        case event.key === "m":
-            toggleMs();
-            break;
+    // 77 = "m" key
+	if (event.keyCode === 77) {
+		toggleMs();
+		return;
+	}
 
-        // 49-57 is 1-9 on the top row
-        // 97-105 is 1-9 on the number keypad
-        case /(49|5[0-7])/.test(event.keyCode) || /(9[7-9]|10[0-5])/.test(event.keyCode):
+    // 49-57 is 1-9 on the top row
+    // 97-105 is 1-9 on the number keypad
+	if (/(49|5[0-7])/.test(event.keyCode) || /(9[7-9]|10[0-5])/.test(event.keyCode)) {
+        // Depending on the number pressed (keypad or not), sub is the
+        // number subtracted from the keyCode to get a base 10 number
+		const sub = event.keyCode > 57 ? 96 : 48;
+		const numberPressed = event.keyCode - sub;
+		let time = numberPressed * 60;
 
-            // Depending on the number pressed (keypad or not), sub is the
-            // number subtracted from the keyCode to get a base 10 number
-            var sub = event.keyCode > 57 ? 96 : 48;
-            var numberPressed = event.keyCode - sub;
-            var time = numberPressed * 60;
+		const timePad = 1;
+		time += timePad;
 
-            // If shift is pressed, subtracted the number.
-            if (event.shiftKey) {
-                time *= -1;
-            }
+        // If shift is pressed, subtracted the number.
+		if (event.shiftKey) {
+			time *= -1;
+		}
 
-
-            isStopped = false;
-            addToTimer(time);
-            break;
-
-        default:
-            break;
-    }
+		isStopped = false;
+		addToTimer(time);
+	}
 }
 
-window.addEventListener("keydown", onKeyPressed);
+window.addEventListener('keydown', onKeyPressed);
+window.addEventListener('hashchange', onHashChange);
+document.body.addEventListener('dblclick', onBodyDblclick);
+run(window.location.hash.slice(1));

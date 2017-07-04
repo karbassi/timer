@@ -9,11 +9,19 @@
     <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
 </head>
 <body>
+    <div id="bgfill"></div>
+
+    <span id="tutorial">Press any number.</span>
+    <span id="done">Times up!</span>
 
     <div id="timer">
-        <!--<span id="hours"></span>:<span id="minutes"></span>:<span id="seconds"></span>.<span id="microseconds"></span>-->
-        <span id="hours"></span>h <span id="minutes"></span>m <span id="seconds"></span>s <span id="microseconds"></span>
+        <span id="days"><span></span>d</span>
+        <span id="hours"><span></span>h</span>
+        <span id="minutes"><span></span>m</span>
+        <span id="seconds"><span></span>s</span>
+        <span id="milliseconds"><span></span>ms</span>
     </div>
+
 
     <audio id="beep" loop="loop">
         <source src="./audio.ogg" type="audio/ogg">

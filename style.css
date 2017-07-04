@@ -1,10 +1,12 @@
-html, body {
+html,
+body {
     height: 100%;
     overflow: hidden;
 }
 
 body {
     background-color: #000;
+    font-family: Courier New, Courier, monospace;
     color: #FFF;
     display: flex;
     align-items: center;
@@ -15,7 +17,43 @@ body {
     user-select: none;
 }
 
+/*#bgfill {
+    background-color: rgba(255, 255, 0, 0.75);
+    position: absolute;
+    width: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}*/
+
+#bgfill {
+    background-color: rgba(255, 255, 0, 1);
+    position: absolute;
+    height: 3vh;
+    width: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+}
+
 #timer {
     font-size: 10vw;
-    font-family: Courier New, Courier, monospace;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#timer>span {
+    margin-right: 0.5em;
+}
+
+#tutorial {
+    display: flex;
+    font-size: 10vmin;
+}
+
+#done {
+    display: none;
+    font-size: 10vmin;
 }
