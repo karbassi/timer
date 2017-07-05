@@ -220,13 +220,6 @@ function stop() {
 	stopTimer();
 }
 
-/**
- * Toggle milliseconds
- */
-function toggleMs() {
-	msHidden = !msHidden;
-}
-
 // Event Listeners
 
 /**
@@ -352,7 +345,7 @@ function onKeyPressed(event) {
 
     // 77 = M
 	if (event.keyCode === 77) {
-		toggleMs();
+		msHidden = !msHidden;
 		return;
 	}
 
