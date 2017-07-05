@@ -114,6 +114,7 @@ function run(str) {
 	start = new Date();
 	end = new Date(start.getTime() + getTime(str));
 
+	isStopped = false;
 	step();
 }
 
@@ -189,35 +190,27 @@ function step() {
 }
 
 /**
- * Stop Audio
+ * Stop timer and sounds.
  */
-function stopSound() {
+function stop() {
+	// Reset enteredTime
+	enteredTime = '';
+
+	// Stop sound
 	sound.pause();
 	sound.currentTime = 0;
-}
 
-/**
- * Stop Timer
- */
-function stopTimer() {
-    // Reset timer
+	// Reset timer
 	isStopped = true;
 	end = undefined;
-	// Display(hmss(0));
+
+	// Update display
 	$('#tutorial').show();
 	$('#timer').hide();
 	$('#done').hide();
 	$('#bgfill').hide();
 	$('#time').hide();
 	$('#time').innerText = '';
-}
-
-/**
- * Stop timer and sounds.
- */
-function stop() {
-	stopSound();
-	stopTimer();
 }
 
 // Event Listeners
@@ -235,7 +228,6 @@ function onBodyDblclick() {
  * @param {MouseEvent} event
  */
 function onHashChange(event) {
-	isStopped = false;
 	const str = event.target.window.location.hash.slice(1);
 	run(str);
 }
@@ -333,11 +325,6 @@ function onKeyPressed(event) {
     // 32 = SPACEBAR
     // 48 = ESC
 	if (event.keyCode === 32 || event.keyCode === 27) {
-		// Reset enteredTime
-		enteredTime = '';
-		$('#time').innerText = '';
-		$('#time').hide();
-
 		// Call stop function
 		stop();
 		return;
