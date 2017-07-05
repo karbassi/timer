@@ -240,6 +240,7 @@ function numberPressed(event) {
 	if (isStopped === false) {
 		addToTimer(numberPressed);
 	} else {
+		stop();
 		enterTime(numberPressed);
 	}
 }
