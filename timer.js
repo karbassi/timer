@@ -216,13 +216,6 @@ function stop() {
 // Event Listeners
 
 /**
- * Called when the body is double clicked
- */
-function onBodyDblclick() {
-	stop();
-}
-
-/**
  * Called when page hash changes.
  *
  * @param {MouseEvent} event
@@ -368,5 +361,5 @@ function onKeyPressed(event) {
 
 window.addEventListener('keydown', onKeyPressed);
 window.addEventListener('hashchange', onHashChange);
-document.body.addEventListener('dblclick', onBodyDblclick);
+document.body.addEventListener('dblclick', stop);
 run(window.location.hash.slice(1));
