@@ -1,20 +1,25 @@
 html,
 body {
-    height: 100%;
     overflow: hidden;
+
+    height: 100%;
 }
 
 body {
-    background-color: #000;
-    font-family: Courier New, Courier, monospace;
-    color: #FFF;
     display: flex;
-    align-items: center;
-    justify-content: center;
+
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    color: #FFFFFF;
+    background-color: #000000;
+
+    font-family: Courier New, Courier, monospace;
+
+    align-items: center;
+    justify-content: center;
 }
 
 /*#bgfill {
@@ -28,32 +33,37 @@ body {
 }*/
 
 #bgfill {
-    background-color: rgba(255, 255, 0, 1);
     position: absolute;
-    height: 3vh;
-    width: 0;
+    z-index: -1;
     bottom: 0;
     left: 0;
-    z-index: -1;
+
+    width: 0;
+    height: 3vh;
+
+    background-color: rgba(255, 255, 0, 1);
 }
 
-#timer {
-    font-size: 10vw;
-
+#timer,
+#time {
     display: flex;
     flex-direction: row;
+
+    font-size: 10vw;
 }
 
-#timer>span {
-    margin-right: 0.5em;
+#timer > span {
+    /*margin-right: 0.5em;*/
 }
 
 #tutorial {
     display: flex;
-    font-size: 10vmin;
+
+    font-size: 9vmin;
 }
 
 #done {
     display: none;
+
     font-size: 10vmin;
 }

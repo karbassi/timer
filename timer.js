@@ -1,8 +1,12 @@
 const sound = $('#beep');
 let start;
 let end;
-let isStopped = false;
+let isStopped = true;
 let msHidden = true;
+
+let enteredTime = '';
+
+// Helpers
 
 function $(str) {
 	const q = document.querySelectorAll(str);
@@ -25,8 +29,12 @@ Element.prototype.show = function (forcedDisplayValue) {
 	}
 };
 
+/**
+ *
+ * @param {*} str
+ */
 function getTime(str) {
-	if (str.indexOf(':') === -1) {
+	if (str.constructor === Number || str.indexOf(':') === -1) {
 		return parseInt(str, 10) * 1e3;
 	}
 
@@ -36,20 +44,16 @@ function getTime(str) {
         // 1 second
 		1,
 
-        // 1 minute
-        // 60 seconds
+        // 1 minute; 60 seconds
 		60,
 
-        // 1 hour
-        // 60 * 60 seconds
+        // 1 hour; 60 * 60 seconds
 		3600,
 
-        // 1 day
-        // 60 * 60 * 24 seconds
+        // 1 day; 60 * 60 * 24 seconds
 		86400,
 
-        // 1 week
-        // 60 * 60 * 24 * 7 seconds
+        // 1 week; 60 * 60 * 24 * 7 seconds
 		604800
 	];
 
@@ -84,7 +88,7 @@ function display(date) {
 			x--;
 		}
 
-		if (show === true) {
+		if (show === true || part === 'seconds') {
 			$('#' + part).style.display = 'inline-block';
 			$('#' + part + ' span').innerText = date[part];
 		} else {
@@ -125,14 +129,9 @@ function hmss(milliseconds) {
 
 	let x = milliseconds / 1e3;
 
-    // Milliseconds
-	let ms = String(parseInt(((x % 1) * 1e3), 10));
-
-	while (ms.length < 3) {
-		ms += '0';
-	}
-
-	date.milliseconds = ms;
+	// Milliseconds
+	const ms = String(parseInt(((x % 1) * 1e3), 10));
+	date.milliseconds = '000'.substring(ms.length) + ms;
 
     // Seconds
 	const s = String(parseInt(x % 60, 10));
@@ -167,7 +166,8 @@ function step() {
 	const now = Number(new Date());
 	const diff = end - now;
 
-	if (diff > 0) {
+	// Only run when more than 100 milliseconds of difference
+	if (diff > 100) {
 		const percentage = ((now - start) / (end - start)) * 100;
 		$('#bgfill').style.width = percentage + '%';
 
@@ -176,32 +176,16 @@ function step() {
 		window.requestAnimationFrame(step);
 	} else {
         // Done
-		// display(hmss(0));
 
+		isStopped = true;
+
+		$('#done').show('flex');
 		$('#tutorial').hide();
 		$('#timer').hide();
-		$('#done').show('flex');
 		$('#bgfill').hide();
 
 		sound.play();
-		isStopped = true;
 	}
-}
-
-/**
- * Add `seconds` to current (or new) timer.
- *
- * @param {String} seconds
- */
-function addToTimer(seconds) {
-	const ms = parseInt(seconds, 10) * 1e3;
-
-	if (!(end instanceof Date)) {
-		end = new Date();
-	}
-
-	end = new Date(end.getTime() + ms);
-	step();
 }
 
 /**
@@ -256,8 +240,89 @@ function onBodyDblclick() {
  * @param {MouseEvent} event
  */
 function onHashChange(event) {
+	isStopped = false;
 	const str = event.target.window.location.hash.slice(1);
 	run(str);
+}
+
+function numberPressed(event) {
+	// Depending on the number pressed (keypad or not), sub is the
+	// number subtracted from the keyCode to get a base 10 number
+	const sub = event.keyCode > 57 ? 96 : 48;
+	let numberPressed = event.keyCode - sub;
+
+	// If shift is pressed, subtracted the number.
+	if (event.shiftKey) {
+		numberPressed *= -1;
+	}
+
+	// If running
+	if (isStopped === false) {
+		addToTimer(numberPressed);
+	} else {
+		enterTime(numberPressed);
+	}
+}
+
+/**
+ * Add `seconds` to current (or new) timer.
+ *
+ * @param {String} seconds
+ */
+function addToTimer(numberPressed) {
+	if (numberPressed === 0) {
+		return;
+	}
+
+	const timePad = 1;
+
+	// Make into seconds
+	const seconds = (parseInt(numberPressed, 10) * 60) + timePad;
+
+	const ms = seconds * 1e3;
+
+	if (!(end instanceof Date)) {
+		end = new Date();
+	}
+
+	end = new Date(end.getTime() + ms);
+
+	// Start
+	step();
+}
+
+function enterTime(numberPressed, isDelete) {
+	// Hide tutorial
+	$('#tutorial').hide();
+
+	// Show time mode
+	$('#time').show('flex');
+
+	/*
+	 * Make string to always be in #### format
+	 */
+
+	// Get numbers only.
+	enteredTime = enteredTime.replace(/\D/g, '');
+
+	if (isDelete) {
+		enteredTime = enteredTime.slice(0, -1);
+	} else {
+		// Add number pressed to end of string
+		enteredTime = parseInt(enteredTime + numberPressed, 10);
+	}
+
+	// Pad number to be in at least #### format
+	enteredTime = '0000'.substring(enteredTime.length) + enteredTime;
+
+	// Only return the last 4 number
+	enteredTime = enteredTime.slice(-4);
+
+	// Format entered time as ##[:##]
+	enteredTime = enteredTime.replace(/(.{2})/g, '$1:').replace(/(.*?):$/g, '$1');
+
+	// Display on page
+	$('#time').innerText = enteredTime;
 }
 
 /**
@@ -270,39 +335,53 @@ function onKeyPressed(event) {
 		return; // Do nothing if the event was already processed
 	}
 
-    // 32 = spacebar
-    // 48 = "0" key
-	if (event.keyCode === 32 || event.keyCode === 48) {
+    // 32 = SPACEBAR
+    // 48 = ESC
+	if (event.keyCode === 32 || event.keyCode === 27) {
+		// Reset enteredTime
+		enteredTime = '';
+		$('#time').innerText = '';
+		$('#time').hide();
+
+		// Call stop function
 		stop();
 		return;
 	}
 
-    // 77 = "m" key
+    // 77 = M
 	if (event.keyCode === 77) {
 		toggleMs();
 		return;
 	}
 
-    // 49-57 is 1-9 on the top row
-    // 97-105 is 1-9 on the number keypad
-	if (/(49|5[0-7])/.test(event.keyCode) || /(9[7-9]|10[0-5])/.test(event.keyCode)) {
-        // Depending on the number pressed (keypad or not), sub is the
-        // number subtracted from the keyCode to get a base 10 number
-		const sub = event.keyCode > 57 ? 96 : 48;
-		const numberPressed = event.keyCode - sub;
-		let time = numberPressed * 60;
-
-		const timePad = 1;
-		time += timePad;
-
-        // If shift is pressed, subtracted the number.
-		if (event.shiftKey) {
-			time *= -1;
-		}
-
-		isStopped = false;
-		addToTimer(time);
+    // 48-57 = top row numbers (0-9)
+    // 96-105 = keypad numbers (0-9)
+	if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+		numberPressed(event);
 	}
+
+	// 13 = ENTER
+	if (event.keyCode === 13) {
+		// Start timer if a number has been entered.
+		if (isStopped === true && enteredTime.length > 0) {
+			// Hide #time
+			$('#time').innerText = '';
+			$('#time').hide();
+
+			// Set to false so run() works
+			isStopped = false;
+
+			// Start
+			run(enteredTime);
+		}
+	}
+
+	// 8 = BACKSPACE
+	if (event.keyCode === 8) {
+		enterTime(0, true);
+	}
+
+	// 46 = DELETE
 }
 
 window.addEventListener('keydown', onKeyPressed);
