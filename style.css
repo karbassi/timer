@@ -44,16 +44,24 @@ body {
     background-color: rgba(255, 255, 0, 1);
 }
 
-#timer,
-#time {
-    display: flex;
+#timer {
+    display: none;
     flex-direction: row;
 
     font-size: 10vw;
 }
 
+
+
 #timer > span {
     /*margin-right: 0.5em;*/
+}
+
+#time {
+    display: none;
+    flex-direction: row;
+
+    font-size: 10vw;
 }
 
 #tutorial {

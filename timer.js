@@ -73,7 +73,7 @@ function display(date) {
 	}
 
 	$('#bgfill').show();
-	$('#timer').show();
+	$('#timer').show('flex');
 	$('#tutorial').hide();
 
 	const parts = ['days', 'hours', 'minutes', 'seconds', 'milliseconds'];
@@ -208,6 +208,8 @@ function stopTimer() {
 	$('#timer').hide();
 	$('#done').hide();
 	$('#bgfill').hide();
+	$('#time').hide();
+	$('#time').innerText = '';
 }
 
 /**
