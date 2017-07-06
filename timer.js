@@ -189,6 +189,10 @@ function step() {
 	}
 }
 
+function isDone() {
+	return (end - Number(new Date())) < 0;
+}
+
 /**
  * Stop timer and sounds.
  */
@@ -205,12 +209,12 @@ function stop() {
 	end = undefined;
 
 	// Update display
-	$('#tutorial').show();
 	$('#timer').hide();
 	$('#done').hide();
 	$('#bgfill').hide();
 	$('#time').hide();
 	$('#time').innerText = '';
+	$('#tutorial').show();
 }
 
 // Event Listeners
@@ -240,7 +244,10 @@ function numberPressed(event) {
 	if (isStopped === false) {
 		addToTimer(numberPressed);
 	} else {
-		stop();
+		// Stop();
+		if (isDone()) {
+			stop();
+		}
 		enterTime(numberPressed);
 	}
 }
