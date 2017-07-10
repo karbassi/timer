@@ -365,6 +365,13 @@ function onKeyPressed(event) {
 	}
 
 	// 46 = DELETE
+
+	// 70 = F
+	if (event.keyCode === 70) {
+		if (screenfull.enabled) {
+			screenfull.toggle();
+		}
+	}
 }
 
 window.addEventListener('keydown', onKeyPressed);

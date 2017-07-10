@@ -8,6 +8,8 @@ body {
 body {
     display: flex;
 
+    margin: 0;
+
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -24,7 +26,7 @@ body {
 
 #bgfill {
     position: absolute;
-    z-index: -1;
+    z-index: 1;
     bottom: 0;
     left: 0;
 
@@ -35,6 +37,8 @@ body {
 }
 
 #timer {
+    z-index: 2;
+
     display: none;
     flex-direction: row;
 
@@ -42,6 +46,8 @@ body {
 }
 
 #time {
+    z-index: 2;
+
     display: none;
     flex-direction: row;
 
@@ -49,12 +55,16 @@ body {
 }
 
 #tutorial {
+    z-index: 2;
+
     display: flex;
 
     font-size: 9vmin;
 }
 
 #done {
+    z-index: 2;
+
     display: none;
 
     font-size: 10vmin;
