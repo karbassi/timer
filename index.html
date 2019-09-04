@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Timer</title>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Timer</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <meta name="description" content="A simple offline timer.">
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" sizes="192x192" href="./assets/img/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="./assets/img/icons/icon-192x192.png">
 </head>
 <body>
-    <div id="bgfill"></div>
+    <div class="bg-fill"></div>
 
-    <div id="tutorial">Press any number.</div>
-    <div id="time"></div>
-    <div id="done">Times up!</div>
+    <div class="tutorial">Press any number.</div>
+    <div class="time"></div>
+    <div class="done">Times up!</div>
 
-    <div id="timer">
-        <span id="days"><span></span>:</span>
-        <span id="hours"><span></span>:</span>
-        <span id="minutes"><span></span>:</span>
-        <span id="seconds"><span></span></span>
-        <span id="milliseconds">.<span></span></span>
+    <div class="timer">
+        <span class="days"><span></span>:</span>
+        <span class="hours"><span></span>:</span>
+        <span class="minutes"><span></span>:</span>
+        <span class="seconds"><span></span></span>
+        <span class="milliseconds">.<span></span></span>
     </div>
 
 
-    <audio id="beep" loop="loop">
-        <source src="assets/audio/beep.ogg?v=2" type="audio/ogg">
-        <source src="assets/audio/beep.mp3?v=2" type="audio/mp3">
+    <audio class="beep" loop="loop">
+        <source src="./assets/audio/beep.ogg" type="audio/ogg">
+        <source src="./assets/audio/beep.mp3" type="audio/mp3">
     </audio>
 
-    <script src="assets/js/screenfull.min.js"></script>
-    <script src="assets/js/timer.js"></script>
+    <script defer src="./assets/js/index.js"></script>
+    <script async src="./assets/js/screenfull.min.js"></script>
+    <script async src="./assets/js/timer.js"></script>
 </body>
 </html>
