@@ -1,74 +1,53 @@
-@import url("https://fonts.googleapis.com/css?family=Inconsolata|Lobster+Two");
-html,
-body {
+body,
+html {
     overflow: hidden;
-
     height: 100%;
 }
 
 body {
     display: flex;
-
     margin: 0;
-
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
-    color: #FFFFFF;
-    background-color: #000000;
-
-    font-family: "Inconsolata", monospace;
-
+    color: #fff;
+    background-color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     align-items: center;
     justify-content: center;
 }
 
-#bgfill {
+.bg-fill {
     position: absolute;
     z-index: 1;
     bottom: 0;
     left: 0;
-
     width: 0;
     height: 3vh;
-
-    background-color: rgba(255, 255, 0, 1);
+    background-color: #ff0;
 }
 
-#timer {
-    z-index: 2;
-
-    display: none;
-    flex-direction: row;
-
-    font-size: 10vw;
-    font-weight: normal;
+.timer {
+    font-weight: 400;
 }
 
-#time {
+.time,
+.timer {
     z-index: 2;
-
     display: none;
     flex-direction: row;
-
     font-size: 10vw;
 }
 
-#tutorial {
+.tutorial {
     z-index: 2;
-
     display: flex;
-
-    font-family: "Lobster Two", cursive;
     font-size: 9vmin;
 }
 
-#done {
+.done {
     z-index: 2;
-
     display: none;
-
     font-size: 10vmin;
 }
