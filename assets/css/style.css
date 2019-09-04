@@ -51,3 +51,10 @@ body {
     display: none;
     font-size: 10vmin;
 }
+
+.input {
+    width: 1px;
+    position: absolute;
+    top: -999em;
+    left: -999em;
+}

@@ -376,7 +376,21 @@ function onKeyPressed(event) {
     }
 }
 
+function mobileWorkAround(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    document.querySelector('.input').focus();
+}
+
+function loaded() {
+
+    run(window.location.hash.slice(1));
+}
+
+window.addEventListener('load', loaded);
 window.addEventListener('keydown', onKeyPressed);
 window.addEventListener('hashchange', onHashChange);
+document.body.addEventListener('touchend', mobileWorkAround);
+
+// TODO: A way for mobile users to stop alarm
 document.body.addEventListener('dblclick', stop);
-run(window.location.hash.slice(1));
