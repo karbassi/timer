@@ -2,7 +2,7 @@
     "name": "PWA Timer",
     "short_name": "Timer",
     "description": "A simple offline timer.",
-    "start_url": "https://ali.codes/timer/",
+    "start_url": "https://www.ali.codes/timer/",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#000000",
