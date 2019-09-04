@@ -1,4 +1,4 @@
-const CACHE = "precache-v3";
+const CACHE = "precache-v4";
 const precacheFiles = [
   /* Add an array of files to precache for your app */
   "/timer/index.html",
