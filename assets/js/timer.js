@@ -383,7 +383,6 @@ function mobileWorkAround(event) {
 }
 
 function loaded() {
-
     run(window.location.hash.slice(1));
 }
 

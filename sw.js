@@ -1,7 +1,10 @@
-const CACHE = "precache-v5";
+const CACHE = "precache-v6";
 const precacheFiles = [
   /* Add an array of files to precache for your app */
   "/timer/index.html",
+  "/timer/assets/img/icons/icon-180x180.png",
+  "/timer/assets/img/icons/icon-192x192.png",
+  "/timer/assets/img/icons/icon-512x512.png",
   "/timer/assets/css/style.css",
   "/timer/assets/js/screenfull.min.js",
   "/timer/assets/js/timer.js",
